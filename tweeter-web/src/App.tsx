@@ -14,6 +14,12 @@ import { AuthToken, User, FakeData, Status } from "tweeter-shared";
 import UserItemScroller from "./components/mainLayout/UserItemScroller";
 import StatusItemScroller from "./components/mainLayout/StatusItemScroller";
 import useInfoHook from "./components/userInfo/UserInfoHook";
+import {
+  FolloweePresenter,
+  FolloweeView,
+} from "./presenters/FolloweePresenter";
+import { UserItemView } from "./presenters/UserItemPresenter";
+import { FollowerPresenter } from "./presenters/FollowerPresenter";
 
 const App = () => {
   const { currentUser, authToken } = useInfoHook();
@@ -106,6 +112,9 @@ const AuthenticatedRoutes = () => {
               key={1}
               loadItems={loadMoreFollowees}
               itemDescription="followees"
+              presenterGenerator={(view: UserItemView) =>
+                new FolloweePresenter(view)
+              }
             />
           }
         />
@@ -116,6 +125,9 @@ const AuthenticatedRoutes = () => {
               key={2}
               loadItems={loadMoreFollowers}
               itemDescription="followers"
+              presenterGenerator={(view: UserItemView) =>
+                new FollowerPresenter(view)
+              }
             />
           }
         />
