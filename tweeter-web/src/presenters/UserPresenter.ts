@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from "react";
 import { AuthToken, User } from "tweeter-shared";
 
 export interface UserView {
@@ -17,5 +16,5 @@ export abstract class UserPresenter {
     }
     public get isLoading(): boolean { return this._isLoading; }
     protected set isLoading(value: boolean) { this._isLoading = value; }
-    public abstract doAuth(firstName?: string, lastName?:string, rememberMe?: boolean, alias?:string,password?:string,imageBytes?:Uint8Array,imageFileExtension?:string):void
+    public abstract doAuth(alias?:string,password?:string, rememberMe?: boolean, firstName?: string, lastName?:string,imageBytes?:Uint8Array,imageFileExtension?:string):void
 }

@@ -15,7 +15,7 @@ const userNavigationHook = (props:Props) => {
 
     const navigateToUser = async (event: React.MouseEvent): Promise<void> => {
         event.preventDefault();
-        presenter.navigateToUser(event, authToken, currentUser);
+        await presenter.navigateToUser(event, authToken, currentUser);
       };
     
       return { navigateToUser };
