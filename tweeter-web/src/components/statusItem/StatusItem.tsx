@@ -9,7 +9,6 @@ import {
 
 interface Props {
   value: Status;
-  presenterGenerator: (view: UserNavigationView) => UserNavigationPresenter;
 }
 const StatusItem = (props: Props) => {
   const { navigateToUser } = userNavigationHook({
@@ -44,10 +43,7 @@ const StatusItem = (props: Props) => {
             </h2>
             {props.value.formattedDate}
             <br />
-            <Post
-              status={props.value}
-              presenterGenerator={props.presenterGenerator}
-            />
+            <Post status={props.value} />
           </div>
         </div>
       </div>

@@ -4,6 +4,7 @@ import AppNavbar from "../appNavbar/AppNavbar";
 import PostStatus from "../postStatus/PostStatus";
 import UserInfo from "../userInfo/UserInfo";
 import { LogoutPresenter, LogoutView } from "../../presenters/LogoutPresenter";
+import { PostPresenter, PostView } from "../../presenters/PostPresenter";
 
 const MainLayout = () => {
   return (
@@ -19,7 +20,11 @@ const MainLayout = () => {
                 <UserInfo />
               </div>
               <div className="p-3 border mt-1 rounded bg-light">
-                <PostStatus />
+                <PostStatus
+                  presenterGenerator={(view: PostView) =>
+                    new PostPresenter(view)
+                  }
+                />
               </div>
             </div>
           </div>

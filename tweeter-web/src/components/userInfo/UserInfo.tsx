@@ -52,7 +52,6 @@ const UserInfo = () => {
   ): Promise<void> => {
     event.preventDefault();
     presenter.followDisplayedUser(authToken!, displayedUser!);
-    console.log(isFollower, followeeCount, followerCount);
   };
 
   const unfollowDisplayedUser = async (
