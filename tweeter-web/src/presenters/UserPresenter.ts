@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react";
 import { AuthToken, User } from "tweeter-shared";
 
 export interface UserView {

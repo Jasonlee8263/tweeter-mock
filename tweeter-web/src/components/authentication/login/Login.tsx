@@ -7,10 +7,11 @@ import useToastListener from "../../toaster/ToastListenerHook";
 import AuthenticationFields from "../AuthenticationFields";
 import useInfoHook from "../../userInfo/UserInfoHook";
 import { UserPresenter, UserView } from "../../../presenters/UserPresenter";
+import { LoginPresenter } from "../../../presenters/LoginPresenter";
 
 interface Props {
   originalUrl?: string;
-  presenterGenerator: (view: UserView) => UserPresenter;
+  presenterGenerator: (view: UserView) => LoginPresenter;
 }
 
 const Login = (props: Props) => {
