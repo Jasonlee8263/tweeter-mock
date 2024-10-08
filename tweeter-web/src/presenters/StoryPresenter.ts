@@ -24,7 +24,7 @@ export class StoryPresenter extends StatusItemPresenter{
           this.view.addItems(newItems);
         } catch (error) {
           this.view.displayErrorMessage(
-            `Failed to load Stories because of exception: ${error}`
+            `Failed to load stories because of exception: ${error}`
           );
         }
       };

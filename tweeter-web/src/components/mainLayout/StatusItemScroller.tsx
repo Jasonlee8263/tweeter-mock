@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useToastListener from "../toaster/ToastListenerHook";
-import { AuthToken, FakeData, Status, User } from "tweeter-shared";
+import { Status } from "tweeter-shared";
 import InfiniteScroll from "react-infinite-scroll-component";
 import StatusItem from "../statusItem/StatusItem";
 import useInfoHook from "../userInfo/UserInfoHook";
@@ -19,8 +19,6 @@ const StatusItemScroller = (props: Props) => {
   const [items, setItems] = useState<Status[]>([]);
   const [newItems, setNewItems] = useState<Status[]>([]);
   const [changedDisplayedUser, setChangedDisplayedUser] = useState(true);
-
-  const addItems = (newItems: Status[]) => setNewItems(newItems);
 
   const { displayedUser, authToken } = useInfoHook();
   // Initialize the component whenever the displayed user changes
@@ -48,12 +46,12 @@ const StatusItemScroller = (props: Props) => {
     setChangedDisplayedUser(true);
     presenter.reset();
   };
-  const listner: StatusItemView = {
+  const listener: StatusItemView = {
     addItems: (newItems: Status[]) => setNewItems(newItems),
     displayErrorMessage: displayErrorMessage,
   };
 
-  const [presenter] = useState(props.presenterGenerator(listner));
+  const [presenter] = useState(props.presenterGenerator(listener));
 
   const loadMoreItems = async () => {
     presenter.loadMoreItems(authToken!, displayedUser!.alias);
