@@ -53,7 +53,6 @@ const Register = (props: Props) => {
     const file = event.target.files?.[0];
     handleImageFile(file);
   };
-
   const handleImageFile = (file: File | undefined) => {
     if (file) {
       setImageUrl(URL.createObjectURL(file));
