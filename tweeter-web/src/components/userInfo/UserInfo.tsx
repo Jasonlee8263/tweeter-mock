@@ -34,10 +34,10 @@ const UserInfo = () => {
     displayErrorMessage: displayErrorMessage,
     displayInfoMessage: displayInfoMessage,
     clearLastInfoMessage: clearLastInfoMessage,
-    addFolloweeCount: (count: number) => setFolloweeCount(count),
-    addFollowerCount: (count: number) => setFollowerCount(count),
-    addIsFollower: (isFollower: boolean) => setIsFollower(isFollower),
-    addIsLoading: (isLoading: boolean) => setIsLoading(isLoading),
+    setFolloweeCount: setFolloweeCount,
+    setFollowerCount: setFollowerCount,
+    setIsFollower: setIsFollower,
+    setIsLoading: setIsLoading,
   };
 
   const [presenter] = useState(new UserInfoPresenter(listener));
