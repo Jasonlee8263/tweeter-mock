@@ -1,40 +1,31 @@
 import { AuthToken, Status, User } from "tweeter-shared";
 import { StatusService } from "../model/service/StatusService";
+import { MessageView, Presenter } from "./Presenter";
 
-export interface PostView {
-    setPost: (post: string) => void;
-    setIsLoading: (isLoading: boolean) => void;
-    displayInfoMessage: (message: string, duration: number) => void;
-    displayErrorMessage: (message: string) => void;
-    clearLastInfoMessage: () => void;
+export interface PostView extends MessageView {
+  setPost: (post: string) => void;
+  setIsLoading: (isLoading: boolean) => void;
 }
-export class PostPresenter {
-    private _view: PostView;
-    private statusService: StatusService;
-    constructor(view: PostView) {
-        this._view = view;
-        this.statusService = new StatusService();
-    }
-    public async submitPost(post: string, currentUser: User | null, authToken: AuthToken | null): Promise<void> {
-    
-        try {
-          this._view.setIsLoading(true);
-          this._view.displayInfoMessage("Posting status...", 0);
-    
-          const status = new Status(post, currentUser!, Date.now());
-    
-          await this.statusService.postStatus(authToken!, status);
-    
-          this._view.setPost("");
-          this._view.displayInfoMessage("Status posted!", 2000);
-        } catch (error) {
-          this._view.displayErrorMessage(
-            `Failed to post the status because of exception: ${error}`
-          );
-        } finally {
-          this._view.clearLastInfoMessage();
-          this._view.setIsLoading(false);
-        }
-      };
-
+export class PostPresenter extends Presenter<PostView> {
+  private statusService: StatusService;
+  constructor(view: PostView) {
+    super(view);
+    this.statusService = new StatusService();
+  }
+  public async submitPost(
+    post: string,
+    currentUser: User | null,
+    authToken: AuthToken | null
+  ): Promise<void> {
+    this.view.setIsLoading(true);
+    this.view.displayInfoMessage("Posting status...", 0);
+    this.itemHandler(async () => {
+      const status = new Status(post, currentUser!, Date.now());
+      await this.statusService.postStatus(authToken!, status);
+      this.view.setPost("");
+      this.view.displayInfoMessage("Status posted!", 2000);
+      this.view.clearLastInfoMessage();
+      this.view.setIsLoading(false);
+    }, "post the status");
+  }
 }

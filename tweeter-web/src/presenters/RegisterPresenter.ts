@@ -12,16 +12,15 @@ export class RegisterPresenter extends UserPresenter {
     imageBytes: Uint8Array,
     imageFileExtension: string
   ) {
-    await this.doAuth(
-      () =>
-        this.service.register(
-          firstName,
-          lastName,
-          alias,
-          password,
-          imageBytes,
-          imageFileExtension
-        ),
+    await this.doAuth(() =>
+      this.service.register(
+        firstName,
+        lastName,
+        alias,
+        password,
+        imageBytes,
+        imageFileExtension
+      )
     );
   }
 
