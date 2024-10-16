@@ -1,8 +1,8 @@
 import { AuthToken, User } from "tweeter-shared";
 import { FollowService } from "../model/service/FollowService";
+import { View } from "./Presenter";
 
-export interface UserInfoView {
-  displayErrorMessage: (message: string) => void;
+export interface UserInfoView extends View{
   displayInfoMessage: (message: string, duration: number) => void;
   clearLastInfoMessage: () => void;
   setFolloweeCount: (count: number) => void;

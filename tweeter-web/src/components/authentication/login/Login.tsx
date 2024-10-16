@@ -18,14 +18,19 @@ const Login = (props: Props) => {
   const [alias, setAlias] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
   const { updateUserInfo } = useInfoHook();
   const { displayErrorMessage } = useToastListener();
 
   const listener: UserView = {
+    setIsLoading: setIsLoading,
+    navigate: navigate,
     updateUserInfo: updateUserInfo,
     displayErrorMessage: displayErrorMessage,
+    rememberMe: rememberMe,
+    originalUrl: props.originalUrl,
   };
 
   const [presenter] = useState(props.presenterGenerator(listener));
@@ -41,12 +46,7 @@ const Login = (props: Props) => {
   };
 
   const doLogin = async () => {
-    presenter.doAuth(alias, password, rememberMe);
-    if (!!props.originalUrl) {
-      navigate(props.originalUrl);
-    } else {
-      navigate("/");
-    }
+    presenter.doLogin(alias, password, rememberMe);
   };
 
   const inputFieldGenerator = () => {
@@ -80,7 +80,7 @@ const Login = (props: Props) => {
       switchAuthenticationMethodGenerator={switchAuthenticationMethodGenerator}
       setRememberMe={setRememberMe}
       submitButtonDisabled={checkSubmitButtonStatus}
-      isLoading={presenter.isLoading}
+      isLoading={isLoading}
       submit={doLogin}
     />
   );

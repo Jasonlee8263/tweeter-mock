@@ -15,6 +15,6 @@ export class StoryPresenter extends StatusItemPresenter{
     );
   }
   protected getItemDescription(): string {
-    return "stories";
+    return "load stories";
   }
 }

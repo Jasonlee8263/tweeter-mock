@@ -21,14 +21,18 @@ const Register = (props: Props) => {
   const [imageUrl, setImageUrl] = useState<string>("");
   const [imageFileExtension, setImageFileExtension] = useState<string>("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
   const { updateUserInfo } = useInfoHook();
   const { displayErrorMessage } = useToastListener();
 
   const listener: UserView = {
+    setIsLoading: setIsLoading,
+    navigate: navigate,
     updateUserInfo: updateUserInfo,
     displayErrorMessage: displayErrorMessage,
+    rememberMe: rememberMe,
   };
 
   const [presenter] = useState(props.presenterGenerator(listener));
@@ -61,7 +65,7 @@ const Register = (props: Props) => {
   };
 
   const doRegister = async () => {
-    presenter.doAuth(
+    presenter.doRegister(
       alias,
       password,
       rememberMe,
@@ -70,7 +74,6 @@ const Register = (props: Props) => {
       imageBytes,
       imageFileExtension
     );
-    navigate("/");
   };
 
   const inputFieldGenerator = () => {
@@ -139,7 +142,7 @@ const Register = (props: Props) => {
       switchAuthenticationMethodGenerator={switchAuthenticationMethodGenerator}
       setRememberMe={setRememberMe}
       submitButtonDisabled={checkSubmitButtonStatus}
-      isLoading={presenter.isLoading}
+      isLoading={isLoading}
       submit={doRegister}
     />
   );

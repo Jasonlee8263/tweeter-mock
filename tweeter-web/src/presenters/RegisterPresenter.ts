@@ -3,12 +3,7 @@ import { UserPresenter, UserView } from "./UserPresenter";
 import { Buffer } from "buffer";
 
 export class RegisterPresenter extends UserPresenter {
-  private userService: UserService;
-  constructor(view: UserView) {
-    super(view);
-    this.userService = new UserService();
-  }
-  public async doAuth(
+  public async doRegister(
     alias: string,
     password: string,
     rememberMe: boolean,
@@ -17,26 +12,17 @@ export class RegisterPresenter extends UserPresenter {
     imageBytes: Uint8Array,
     imageFileExtension: string
   ) {
-    try {
-      this.isLoading = true;
-
-      const [user, authToken] = await this.userService.register(
-        firstName,
-        lastName,
-        alias,
-        password,
-        imageBytes,
-        imageFileExtension
-      );
-
-      this.view.updateUserInfo(user, user, authToken, rememberMe);
-    } catch (error) {
-      this.view.displayErrorMessage(
-        `Failed to register user because of exception: ${error}`
-      );
-    } finally {
-      this.isLoading = false;
-    }
+    await this.doAuth(
+      () =>
+        this.service.register(
+          firstName,
+          lastName,
+          alias,
+          password,
+          imageBytes,
+          imageFileExtension
+        ),
+    );
   }
 
   public handleImageFile = (
@@ -79,4 +65,8 @@ export class RegisterPresenter extends UserPresenter {
   public getFileExtension = (file: File): string | undefined => {
     return file.name.split(".").pop();
   };
+
+  protected getItemDescription(): string {
+    return "register user";
+  }
 }
