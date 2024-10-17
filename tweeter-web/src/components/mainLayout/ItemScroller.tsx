@@ -1,22 +1,23 @@
 import { useEffect, useState } from "react";
 import useToastListener from "../toaster/ToastListenerHook";
-import { Status } from "tweeter-shared";
 import InfiniteScroll from "react-infinite-scroll-component";
-import StatusItem from "../statusItem/StatusItem";
 import useInfoHook from "../userInfo/UserInfoHook";
 import {
-  StatusItemPresenter,
-  StatusItemView,
-} from "../../presenters/StatusItemPresenter";
+  PagedItemPresenter,
+  PagedItemView,
+} from "../../presenters/PagedItemPresenter";
 
-interface Props {
-  presenterGenerator: (view: StatusItemView) => StatusItemPresenter;
+interface Props<T, U extends PagedItemPresenter<T, any>> {
+  presenterGenerator: (view: PagedItemView<T>) => U;
+  renderItem: (item: T, index: number) => JSX.Element;
 }
 
-const StatusItemScroller = (props: Props) => {
+const ItemScroller = <T, U extends PagedItemPresenter<T, any>>(
+  props: Props<T, U>
+) => {
   const { displayErrorMessage } = useToastListener();
-  const [items, setItems] = useState<Status[]>([]);
-  const [newItems, setNewItems] = useState<Status[]>([]);
+  const [items, setItems] = useState<T[]>([]);
+  const [newItems, setNewItems] = useState<T[]>([]);
   const [changedDisplayedUser, setChangedDisplayedUser] = useState(true);
 
   const { displayedUser, authToken } = useInfoHook();
@@ -45,8 +46,8 @@ const StatusItemScroller = (props: Props) => {
     setChangedDisplayedUser(true);
     presenter.reset();
   };
-  const listener: StatusItemView = {
-    addItems: (newItems: Status[]) => setNewItems(newItems),
+  const listener: PagedItemView<T> = {
+    addItems: (newItems: T[]) => setNewItems(newItems),
     displayErrorMessage: displayErrorMessage,
   };
 
@@ -71,11 +72,11 @@ const StatusItemScroller = (props: Props) => {
             key={index}
             className="row mb-3 mx-0 px-0 border rounded bg-white"
           >
-            <StatusItem value={item} />
+            {props.renderItem(item, index)}
           </div>
         ))}
       </InfiniteScroll>
     </div>
   );
 };
-export default StatusItemScroller;
+export default ItemScroller;
