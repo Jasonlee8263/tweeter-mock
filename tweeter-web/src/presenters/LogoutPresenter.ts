@@ -6,15 +6,21 @@ export interface LogoutView extends MessageView {
   clearUserInfo: () => void;
 }
 export class LogoutPresenter extends Presenter<LogoutView> {
-  private userSerivce: UserService;
+  private _userService: UserService | null;
   constructor(view: LogoutView) {
     super(view);
-    this.userSerivce = new UserService();
+    this._userService = null;
+  }
+  public get userService() {
+    if (this._userService == null) {
+      this._userService = new UserService();
+    }
+    return this._userService;
   }
   public logOut = async (authToken: AuthToken) => {
     this.view.displayInfoMessage("Logging Out...", 0);
     this.itemHandler(async () => {
-      await this.userSerivce.logout(authToken!);
+      await this.userService.logout(authToken!);
       this.view.clearLastInfoMessage();
       this.view.clearUserInfo();
     }, "log user out");
