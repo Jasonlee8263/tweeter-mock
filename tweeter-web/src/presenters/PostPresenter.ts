@@ -7,10 +7,16 @@ export interface PostView extends MessageView {
   setIsLoading: (isLoading: boolean) => void;
 }
 export class PostPresenter extends Presenter<PostView> {
-  private statusService: StatusService;
+  private _statusService: StatusService | null;
   constructor(view: PostView) {
     super(view);
-    this.statusService = new StatusService();
+    this._statusService = null;
+  }
+  public get statusService() {
+    if (this._statusService == null) {
+      this._statusService = new StatusService();
+    }
+    return this._statusService;
   }
   public async submitPost(
     post: string,
