@@ -52,4 +52,12 @@ describe("PostPresenter test", () => {
       )
     ).once();
   });
+  it("tells the view to clear the last info message, clear the post, and display a status posted message", async () => {
+    await postPresenter.submitPost(post, user, authToken);
+    verify(mockPostPresenterView.setPost("")).once();
+    verify(
+      mockPostPresenterView.displayInfoMessage("Status posted!", 2000)
+    ).once();
+    verify(mockPostPresenterView.clearLastInfoMessage()).once();
+  });
 });
