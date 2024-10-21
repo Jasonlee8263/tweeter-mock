@@ -17,7 +17,6 @@ describe("PostPresenter test", () => {
   const post = "This is a post";
   const user = new User("jason", "lee", "j", "test");
   const authToken = new AuthToken("abc123", Date.now());
-  const status = new Status(post, user, Date.now());
 
   beforeEach(() => {
     mockPostPresenterView = mock<PostView>();
@@ -43,7 +42,6 @@ describe("PostPresenter test", () => {
     let [capturedAuthToken, capturedPostStatus] = capture(
       mockStatusService.postStatus
     ).last();
-    console.log(capturedPostStatus);
     const expectedStatus = new Status(post, user, capturedPostStatus.timestamp);
     verify(
       mockStatusService.postStatus(
@@ -59,5 +57,28 @@ describe("PostPresenter test", () => {
       mockPostPresenterView.displayInfoMessage("Status posted!", 2000)
     ).once();
     verify(mockPostPresenterView.clearLastInfoMessage()).once();
+  });
+  it("tells the view to display an error message and clear the last info message and does not tell it to clear the post or display a status posted message", async () => {
+    const error = new Error("An error occured");
+    const status = new Status(post, user, Date.now());
+
+    // let [capturedAuthToken, capturedPostStatus] = capture(
+    //   mockStatusService.postStatus
+    // ).last();
+    // const expectedStatus = new Status(post, user, capturedPostStatus.timestamp);
+    when(
+      mockStatusService.postStatus(deepEqual(authToken), deepEqual(status))
+    ).thenThrow(error);
+    await postPresenter.submitPost(post, user, authToken);
+    verify(
+      mockPostPresenterView.displayErrorMessage(
+        `Failed to post the status because of exception: An error occured`
+      )
+    ).once();
+
+    verify(mockPostPresenterView.setPost("")).never();
+    verify(
+      mockPostPresenterView.displayInfoMessage("Status posted!", 2000)
+    ).never();
   });
 });
