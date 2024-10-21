@@ -46,6 +46,7 @@ const PostStatus = (props: Props) => {
           <textarea
             className="form-control"
             id="postStatusTextArea"
+            aria-label="post"
             rows={10}
             placeholder="What's on your mind?"
             value={post}
