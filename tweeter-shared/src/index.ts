@@ -13,9 +13,9 @@ export type { UserDto } from "./model/dto/UserDto";
 
 //Requests
 export type { PagedUserItemRequest } from "./model/net/request/PagedUserItemRequest";
-export type { GetFolloweeCountRequest } from "./model/net/request/GetFolloweeCountRequest";
+export type { GetFollowCountRequest } from "./model/net/request/GetFollowCountRequest";
 //Response
 export type { PagedUserItemResponse } from "./model/net/response/PagedUserItemResponse";
-export type { GetFolloweeCountResponse } from "./model/net/response/GetFolloweeCountResponse";
+export type { GetFollowCountResponse } from "./model/net/response/GetFollowCountResponse";
 
 export { FakeData } from "./util/FakeData";
