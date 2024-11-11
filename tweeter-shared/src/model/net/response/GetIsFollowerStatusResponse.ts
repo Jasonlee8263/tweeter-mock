@@ -1,4 +1,4 @@
-// import { TweeterResponse } from "./TweeterResponse"
-// export interface GetIsFollowerStatusResponse extends TweeterResponse {
-//     readonly
-// }
+import { TweeterResponse } from "./TweeterResponse";
+export interface GetIsFollowerStatusResponse extends TweeterResponse {
+  readonly isFollower: boolean;
+}

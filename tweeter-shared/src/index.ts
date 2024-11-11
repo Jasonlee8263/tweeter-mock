@@ -14,8 +14,10 @@ export type { UserDto } from "./model/dto/UserDto";
 //Requests
 export type { PagedUserItemRequest } from "./model/net/request/PagedUserItemRequest";
 export type { GetFollowCountRequest } from "./model/net/request/GetFollowCountRequest";
+export type { GetIsFollowerStatusRequest } from "./model/net/request/GetIsFollowerStatusRequest";
 //Response
 export type { PagedUserItemResponse } from "./model/net/response/PagedUserItemResponse";
 export type { GetFollowCountResponse } from "./model/net/response/GetFollowCountResponse";
+export type { GetIsFollowerStatusResponse } from "./model/net/response/GetIsFollowerStatusResponse";
 
 export { FakeData } from "./util/FakeData";
