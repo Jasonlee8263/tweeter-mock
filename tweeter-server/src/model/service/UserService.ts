@@ -27,7 +27,7 @@ export class UserService {
       throw new Error("Invalid registration");
     }
 
-    return [user, FakeData.instance.authToken];
+    return [user.dto, FakeData.instance.authToken.dto];
   }
 
   public async login(
@@ -40,8 +40,7 @@ export class UserService {
     if (user === null) {
       throw new Error("Invalid alias or password");
     }
-
-    return [user, FakeData.instance.authToken];
+    return [user.dto, FakeData.instance.authToken.dto];
   }
   public async logout(token: string): Promise<void> {
     // Pause so we can see the logging out message. Delete when the call to the server is implemented.
