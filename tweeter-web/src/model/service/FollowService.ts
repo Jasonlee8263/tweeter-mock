@@ -5,13 +5,20 @@ import { PagedUserItemRequest } from "tweeter-shared";
 export class FollowService {
   private serverFacade = new ServerFacade();
   public async loadMoreFollowers(
-    authToken: AuthToken,
+    token: string,
     userAlias: string,
     pageSize: number,
-    lastItem: User | null
+    lastItem: UserDto | null
   ): Promise<[User[], boolean]> {
+    const request: PagedUserItemRequest = {
+      token: token,
+      userAlias: userAlias,
+      pageSize: pageSize,
+      lastItem: lastItem,
+    };
+    return this.serverFacade.getMoreFollowers(request);
     // TODO: Replace with the result of calling server
-    return FakeData.instance.getPageOfUsers(lastItem, pageSize, userAlias);
+    // return FakeData.instance.getPageOfUsers(lastItem, pageSize, userAlias);
   }
 
   public async loadMoreFollowees(
