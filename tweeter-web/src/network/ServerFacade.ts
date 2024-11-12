@@ -1,4 +1,6 @@
 import {
+  GetFollowCountRequest,
+  GetFollowCountResponse,
   PagedUserItemRequest,
   PagedUserItemResponse,
   User,
@@ -61,6 +63,42 @@ export class ServerFacade {
       } else {
         return [items, response.hasMore];
       }
+    } else {
+      console.error(response);
+      throw new Error(
+        response.message ?? "An error occurred while fetching followees."
+      );
+    }
+  }
+  public async getFolloweeCount(
+    request: GetFollowCountRequest
+  ): Promise<number> {
+    const response = await this.clientCommunicator.doPost<
+      GetFollowCountRequest,
+      GetFollowCountResponse
+    >(request, "/followee/getCount");
+
+    // Handle errors
+    if (response.success) {
+      return response.count;
+    } else {
+      console.error(response);
+      throw new Error(
+        response.message ?? "An error occurred while fetching followees."
+      );
+    }
+  }
+  public async getFollowerCount(
+    request: GetFollowCountRequest
+  ): Promise<number> {
+    const response = await this.clientCommunicator.doPost<
+      GetFollowCountRequest,
+      GetFollowCountResponse
+    >(request, "/follower/getCount");
+
+    // Handle errors
+    if (response.success) {
+      return response.count;
     } else {
       console.error(response);
       throw new Error(
