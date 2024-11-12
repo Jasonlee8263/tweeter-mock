@@ -12,7 +12,7 @@ export class UserNavigationPresenter extends Presenter<UserNavigationView> {
     this.userService = new UserService();
   }
   public async getUser(authToken: AuthToken, alias: string) {
-    return this.userService.getUser(authToken, alias);
+    return this.userService.getUser(authToken.token, alias);
   }
   public async navigateToUser(
     event: React.MouseEvent,

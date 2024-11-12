@@ -1,8 +1,25 @@
 import {
+  AuthToken,
+  FollowRequest,
+  FollowResponse,
   GetFollowCountRequest,
   GetFollowCountResponse,
+  GetIsFollowerStatusRequest,
+  GetIsFollowerStatusResponse,
+  GetUserRequest,
+  GetUserResponse,
+  LoginRequest,
+  LoginResponse,
+  LogoutRequest,
+  PagedStatusItemRequest,
+  PagedStatusItemResponse,
   PagedUserItemRequest,
   PagedUserItemResponse,
+  PostStatusRequest,
+  RegisterRequest,
+  RegisterResponse,
+  Status,
+  TweeterResponse,
   User,
   UserDto,
 } from "tweeter-shared";
@@ -59,14 +76,14 @@ export class ServerFacade {
     // Handle errors
     if (response.success) {
       if (items == null) {
-        throw new Error(`No followees found`);
+        throw new Error(`No followers found`);
       } else {
         return [items, response.hasMore];
       }
     } else {
       console.error(response);
       throw new Error(
-        response.message ?? "An error occurred while fetching followees."
+        response.message ?? "An error occurred while fetching followers."
       );
     }
   }
@@ -77,14 +94,13 @@ export class ServerFacade {
       GetFollowCountRequest,
       GetFollowCountResponse
     >(request, "/followee/getCount");
-
     // Handle errors
     if (response.success) {
       return response.count;
     } else {
       console.error(response);
       throw new Error(
-        response.message ?? "An error occurred while fetching followees."
+        response.message ?? "An error occurred while fetching followeeCount."
       );
     }
   }
@@ -102,7 +118,185 @@ export class ServerFacade {
     } else {
       console.error(response);
       throw new Error(
-        response.message ?? "An error occurred while fetching followees."
+        response.message ?? "An error occurred while fetching followerCount."
+      );
+    }
+  }
+  public async getIsFollowerStatus(
+    request: GetIsFollowerStatusRequest
+  ): Promise<boolean> {
+    const response = await this.clientCommunicator.doPost<
+      GetIsFollowerStatusRequest,
+      GetIsFollowerStatusResponse
+    >(request, "/follower/isFollower");
+
+    // Handle errors
+    if (response.success) {
+      return response.isFollower;
+    } else {
+      console.error(response);
+      throw new Error(
+        response.message ?? "An error occurred while fetching isFollowerStatus."
+      );
+    }
+  }
+  public async follow(request: FollowRequest): Promise<[number, number]> {
+    const response = await this.clientCommunicator.doPost<
+      FollowRequest,
+      FollowResponse
+    >(request, "/follow");
+
+    // Handle errors
+    if (response.success) {
+      return [response.followerCount, response.followeeCount];
+    } else {
+      console.error(response);
+      throw new Error(
+        response.message ?? "An error occurred while fetching follow."
+      );
+    }
+  }
+  public async unfollow(request: FollowRequest): Promise<[number, number]> {
+    const response = await this.clientCommunicator.doPost<
+      FollowRequest,
+      FollowResponse
+    >(request, "/unfollow");
+
+    // Handle errors
+    if (response.success) {
+      return [response.followerCount, response.followeeCount];
+    } else {
+      console.error(response);
+      throw new Error(
+        response.message ?? "An error occurred while fetching unfollow."
+      );
+    }
+  }
+
+  public async getMoreFeeds(
+    request: PagedStatusItemRequest
+  ): Promise<[Status[], boolean]> {
+    const response = await this.clientCommunicator.doPost<
+      PagedStatusItemRequest,
+      PagedStatusItemResponse
+    >(request, "/status/getFeed");
+
+    // Convert the StatusDto array returned by ClientCommunicator to a Status array
+    const items: Status[] | null =
+      response.success && response.items
+        ? response.items.map((dto) => Status.fromDto(dto) as Status)
+        : null;
+    // Handle errors
+    if (response.success) {
+      if (items == null) {
+        throw new Error(`No feeds found`);
+      } else {
+        return [items, response.hasMore];
+      }
+    } else {
+      console.error(response);
+      throw new Error(
+        response.message ?? "An error occurred while fetching feeds."
+      );
+    }
+  }
+  public async getMoreStory(
+    request: PagedStatusItemRequest
+  ): Promise<[Status[], boolean]> {
+    const response = await this.clientCommunicator.doPost<
+      PagedStatusItemRequest,
+      PagedStatusItemResponse
+    >(request, "/status/getStory");
+
+    // Convert the UserDto array returned by ClientCommunicator to a User array
+    const items: Status[] | null =
+      response.success && response.items
+        ? response.items.map((dto) => Status.fromDto(dto) as Status)
+        : null;
+
+    // Handle errors
+    if (response.success) {
+      if (items == null) {
+        throw new Error(`No followees found`);
+      } else {
+        return [items, response.hasMore];
+      }
+    } else {
+      console.error(response);
+      throw new Error(
+        response.message ?? "An error occurred while fetching stories."
+      );
+    }
+  }
+  public async postStatus(request: PostStatusRequest): Promise<void> {
+    const response = await this.clientCommunicator.doPost<
+      PostStatusRequest,
+      TweeterResponse
+    >(request, "/status/postStatus");
+  }
+  public async register(request: RegisterRequest): Promise<[User, AuthToken]> {
+    const response = await this.clientCommunicator.doPost<
+      RegisterRequest,
+      RegisterResponse
+    >(request, "/user/register");
+    const user = User.fromDto(response.user);
+    const authToken = AuthToken.fromDto(response.authToken);
+    // Handle errors
+    if (response.success && user !== null && authToken !== null) {
+      return [user, authToken];
+    } else {
+      console.error(response);
+      throw new Error(
+        response.message ?? "An error occurred while fetching register."
+      );
+    }
+  }
+  public async login(request: LoginRequest): Promise<[User, AuthToken]> {
+    const response = await this.clientCommunicator.doPost<
+      LoginRequest,
+      LoginResponse
+    >(request, "/user/login");
+    const user = User.fromDto(response.user);
+    const authToken = AuthToken.fromDto(response.authToken);
+    // Handle errors
+    if (response.success && user !== null && authToken !== null) {
+      return [user, authToken];
+    } else {
+      console.error(response);
+      throw new Error(
+        response.message ?? "An error occurred while fetching register."
+      );
+    }
+  }
+  public async logout(request: LogoutRequest): Promise<void> {
+    const response = await this.clientCommunicator.doPost<
+      LogoutRequest,
+      TweeterResponse
+    >(request, "/user/logout");
+    // Handle errors
+    // if (response.success) {
+    // } else {
+    //   console.error(response);
+    //   throw new Error(
+    //     response.message ?? "An error occurred while fetching logout."
+    //   );
+    // }
+  }
+
+  public async getUser(request: GetUserRequest): Promise<User | null> {
+    const response = await this.clientCommunicator.doPost<
+      GetUserRequest,
+      GetUserResponse
+    >(request, "/user/getUser");
+
+    // Handle errors
+    console.log(response);
+    if (response.success) {
+      return User.fromDto(response.user)!;
+    } else {
+      console.error(response);
+      throw new Error(
+        response.message ?? "An error occurred while fetching getUser."
       );
     }
   }

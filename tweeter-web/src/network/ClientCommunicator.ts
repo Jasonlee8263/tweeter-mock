@@ -20,7 +20,7 @@ export class ClientCommunicator {
       });
     }
 
-    console.log(`The request body is '${JSON.stringify(req)}'`);
+    // console.log(`The request body is '${JSON.stringify(req)}'`);
 
     const url = this.getUrl(endpoint);
     const params = this.getParams(
@@ -29,7 +29,7 @@ export class ClientCommunicator {
       req ? JSON.stringify(req) : req
     );
 
-    console.log(`Fetching '${url}' with params '${JSON.stringify(params)}'`);
+    // console.log(`Fetching '${url}' with params '${JSON.stringify(params)}'`);
 
     try {
       const resp: Response = await fetch(url, params);

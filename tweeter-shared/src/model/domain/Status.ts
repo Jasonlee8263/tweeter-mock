@@ -285,6 +285,9 @@ export class Status {
     };
   }
   public static fromDto(dto: StatusDto | null): Status | null {
-    return dto == null ? null : new Status(dto.post, dto.user, dto.timestamp);
+    if (dto == null || dto.user == null) {
+      return null;
+    }
+    return new Status(dto.post, User.fromDto(dto.user)!, dto.timestamp);
   }
 }

@@ -27,7 +27,7 @@ export class PostPresenter extends Presenter<PostView> {
     this.view.displayInfoMessage("Posting status...", 0);
     this.itemHandler(async () => {
       const status = new Status(post, currentUser!, Date.now());
-      await this.statusService.postStatus(authToken!, status);
+      await this.statusService.postStatus(authToken?.token!, status);
       this.view.setPost("");
       this.view.displayInfoMessage("Status posted!", 2000);
       this.view.clearLastInfoMessage();
