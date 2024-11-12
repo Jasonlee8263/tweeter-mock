@@ -7,7 +7,7 @@ export class FolloweePresenter extends UserItemPresenter {
     userAlias: string
   ): Promise<[User[], boolean]> {
     return this.service.loadMoreFollowees(
-      authToken,
+      authToken.token,
       userAlias,
       PAGE_SIZE,
       this.lastItem

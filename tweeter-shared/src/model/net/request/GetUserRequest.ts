@@ -1,6 +1,6 @@
-import { AuthTokenDto } from "../../dto/AuthTokenDto";
+import { TweeterRequest } from "./TweeterRequest";
 
-export interface GetUserRequest {
+export interface GetUserRequest extends TweeterRequest {
   readonly token: string;
   readonly alias: string;
 }
