@@ -7,13 +7,13 @@ export class StatusService {
     token: string,
     userAlias: string,
     pageSize: number,
-    lastItem: StatusDto | null
+    lastItem: Status | null
   ): Promise<[Status[], boolean]> {
     const request = {
       token: token,
       userAlias: userAlias,
       pageSize: pageSize,
-      lastItem: lastItem,
+      lastItem: lastItem?.dto ?? null,
     };
     // TODO: Replace with the result of calling server
     return await this.serverFacade.getMoreFeeds(request);
@@ -23,23 +23,23 @@ export class StatusService {
     token: string,
     userAlias: string,
     pageSize: number,
-    lastItem: StatusDto | null
+    lastItem: Status | null
   ): Promise<[Status[], boolean]> {
     const request = {
       token: token,
       userAlias: userAlias,
       pageSize: pageSize,
-      lastItem: lastItem,
+      lastItem: lastItem?.dto ?? null,
     };
     // TODO: Replace with the result of calling server
     // return FakeData.instance.getPageOfStatuses(lastItem, pageSize);
     return await this.serverFacade.getMoreStory(request);
   }
 
-  public async postStatus(token: string, newStatus: StatusDto): Promise<void> {
+  public async postStatus(token: string, newStatus: Status): Promise<void> {
     const request = {
       token: token,
-      newStatus: newStatus,
+      newStatus: newStatus.dto,
     };
     // Pause so we can see the logging out message. Remove when connected to the server
     // await new Promise((f) => setTimeout(f, 2000));

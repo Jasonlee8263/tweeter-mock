@@ -290,9 +290,12 @@ export class ServerFacade {
     >(request, "/user/getUser");
 
     // Handle errors
-    console.log(response);
+    console.log(response.user);
+    const user = User.fromDto(response.user);
+    console.log(user);
     if (response.success) {
-      return User.fromDto(response.user)!;
+      // return User.fromDto(response.user)!;
+      return user;
     } else {
       console.error(response);
       throw new Error(

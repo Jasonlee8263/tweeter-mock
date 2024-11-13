@@ -279,7 +279,7 @@ export class Status {
   public get dto(): StatusDto {
     return {
       post: this.post,
-      user: this.user,
+      user: this.user.dto,
       timestamp: this.timestamp,
       segments: this.segments,
     };
@@ -288,6 +288,12 @@ export class Status {
     if (dto == null || dto.user == null) {
       return null;
     }
-    return new Status(dto.post, User.fromDto(dto.user)!, dto.timestamp);
+
+    const user = User.fromDto(dto.user);
+    if (user == null) {
+      return null;
+    }
+
+    return new Status(dto.post, user, dto.timestamp);
   }
 }

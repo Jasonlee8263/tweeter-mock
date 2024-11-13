@@ -89,8 +89,11 @@ export class User {
     };
   }
   public static fromDto(dto: UserDto | null): User | null {
-    return dto == null
-      ? null
-      : new User(dto.firstName, dto.lastName, dto.alias, dto.imageUrl);
+    console.log("DTO:", dto); // dto 객체 확인
+    const user = dto
+      ? new User(dto.firstName, dto.lastName, dto.alias, dto.imageUrl)
+      : null;
+    console.log("User instance:", user); // User 인스턴스 확인
+    return user;
   }
 }
