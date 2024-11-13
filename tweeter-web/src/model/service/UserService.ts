@@ -22,7 +22,7 @@ export class UserService {
       lastName: lastName,
       alias: alias,
       password: password,
-      userImageBytes: userImageBytes,
+      userImageBytes: imageStringBase64,
       imageFileExtension: imageFileExtension,
     };
     // const user = FakeData.instance.firstUser;

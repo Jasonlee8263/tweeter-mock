@@ -13,7 +13,7 @@ export class UserService {
     lastName: string,
     alias: string,
     password: string,
-    userImageBytes: Uint8Array,
+    userImageBytes: string,
     imageFileExtension: string
   ): Promise<[UserDto, AuthTokenDto]> {
     // Not neded now, but will be needed when you make the request to the server in milestone 3

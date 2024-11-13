@@ -41,7 +41,7 @@ describe("LogoutPresenter test", () => {
   });
   it("calls logout on the user service with the correct auth token", async () => {
     await logoutPresenter.logOut(authToken);
-    verify(mockUserService.logout(authToken)).once();
+    verify(mockUserService.logout(authToken.token)).once();
 
     // let [capturedAuthToken] = capture(mockUserService.logout).last();
     // expect(capturedAuthToken).toEqual(authToken);
@@ -53,7 +53,7 @@ describe("LogoutPresenter test", () => {
   });
   it("tells the view to display an error message and does not tell it to clear the last info message or clear the user info", async () => {
     const error = new Error("An error occured");
-    when(mockUserService.logout(authToken)).thenThrow(error);
+    when(mockUserService.logout(authToken.token)).thenThrow(error);
     await logoutPresenter.logOut(authToken);
     verify(
       mockLogoutPresenterView.displayErrorMessage(
