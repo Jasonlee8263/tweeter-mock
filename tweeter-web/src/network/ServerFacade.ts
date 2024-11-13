@@ -274,6 +274,7 @@ export class ServerFacade {
       TweeterResponse
     >(request, "/user/logout");
     // Handle errors
+    // console.log(response);
     // if (response.success) {
     // } else {
     //   console.error(response);
@@ -290,11 +291,8 @@ export class ServerFacade {
     >(request, "/user/getUser");
 
     // Handle errors
-    console.log(response.user);
     const user = User.fromDto(response.user);
-    console.log(user);
     if (response.success) {
-      // return User.fromDto(response.user)!;
       return user;
     } else {
       console.error(response);
