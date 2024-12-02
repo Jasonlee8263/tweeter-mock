@@ -10,11 +10,11 @@ import { SessionsDAOProvider } from "./SessionsDAOProvider";
 import { StoryDAO } from "./StoryDAO";
 import { StoryDAOProvider } from "./StoryDAOProvider";
 import { UserDAO } from "./UserDAO";
-import { UserDAOProvider } from "./UserDAOProvider";
+import { DynamoDBUserDAO } from "./DynamoDBUserDAO";
 
 export class DAOFactoryClass implements DAOFactory {
   createUserDAO(): UserDAO {
-    return new UserDAOProvider();
+    return new DynamoDBUserDAO();
   }
   createSessionsDAO(): SessionsDAO {
     return new SessionsDAOProvider();

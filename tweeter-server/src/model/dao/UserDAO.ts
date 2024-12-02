@@ -1,6 +1,7 @@
 import { UserDto } from "tweeter-shared";
 
 export interface UserDAO {
-  getUserByAlias(userId: string): Promise<UserDto>;
-  createUser(user: UserDto): Promise<void>;
+  getUserByAlias(alias: string): Promise<UserDto | null>;
+  createUser(user: UserDto, plainPassword: string): Promise<void>;
+  validatePassword(alias: string, plainPassword: string): Promise<boolean>;
 }
