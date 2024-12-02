@@ -7,9 +7,9 @@ import { UserDAO } from "./UserDAO";
 
 export interface DAOFactory {
   createUserDAO(): UserDAO;
-  createSessionsDAO(): SessionsDAO;
-  createStoryDAO(): StoryDAO;
-  createFeedDAO(): FeedDAO;
-  createFollowsDAO(): FollowsDAO;
+  // createSessionsDAO(): SessionsDAO;
+  // createStoryDAO(): StoryDAO;
+  // createFeedDAO(): FeedDAO;
+  // createFollowsDAO(): FollowsDAO;
   createS3DAO(): S3DAO;
 }

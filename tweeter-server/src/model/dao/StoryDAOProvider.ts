@@ -1,11 +1,11 @@
-import { StoryDAO } from "./StoryDAO";
+// import { StoryDAO } from "./StoryDAO";
 
-export class StoryDAOProvider implements StoryDAO {
-  //   storyId: string;
-  //   alias: string;
-  //   content: string;
-  //   timestamp: string;
-  authorAlias: string;
-  timestamp: number;
-  content: string;
-}
+// export class StoryDAOProvider implements StoryDAO {
+//   //   storyId: string;
+//   //   alias: string;
+//   //   content: string;
+//   //   timestamp: string;
+//   authorAlias: string;
+//   timestamp: number;
+//   content: string;
+// }

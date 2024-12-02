@@ -26,11 +26,10 @@ export class UserService {
     imageFileExtension: string
   ): Promise<[UserDto, AuthTokenDto]> {
     // Not neded now, but will be needed when you make the request to the server in milestone 3
-    const imageStringBase64: string =
-      Buffer.from(userImageBytes).toString("base64");
+    const imageBuffer: Buffer = Buffer.from(userImageBytes, "base64");
     // Upload user profile image to S3
     const imageKey = `${alias}.${imageFileExtension}`;
-    const imageUrl = await this.S3DAO.uploadImage(imageKey, imageStringBase64);
+    const imageUrl = await this.S3DAO.uploadImage(imageKey, imageBuffer);
 
     // TODO: Replace with the result of calling the server
     // const user = FakeData.instance.firstUser;
@@ -70,7 +69,8 @@ export class UserService {
   }
   public async getUser(token: string, alias: string): Promise<UserDto | null> {
     // TODO: Replace with the result of calling server
-    const data = FakeData.instance.findUserByAlias(alias);
-    return data?.dto ?? null;
+    // const data = FakeData.instance.findUserByAlias(alias);
+    const data = await this.userDAO.getUserByAlias(alias);
+    return data ?? null;
   }
 }

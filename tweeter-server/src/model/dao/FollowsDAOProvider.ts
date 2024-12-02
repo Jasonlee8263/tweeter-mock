@@ -1,6 +1,6 @@
-import { FollowsDAO } from "./FollowsDAO";
+// import { FollowsDAO } from "./FollowsDAO";
 
-export class FollowsDAOProvider implements FollowsDAO {
-  followerAlias: string;
-  followeeAlias: string;
-}
+// export class FollowsDAOProvider implements FollowsDAO {
+//   followerAlias: string;
+//   followeeAlias: string;
+// }

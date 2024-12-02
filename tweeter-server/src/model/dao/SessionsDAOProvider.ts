@@ -1,5 +1,5 @@
-import { AuthToken } from "tweeter-shared";
+// import { AuthToken } from "tweeter-shared";
 
-export class SessionsDAOProvider implements SessionsDAO {
-  authToken: AuthToken;
-}
+// export class SessionsDAOProvider implements SessionsDAO {
+//   authToken: AuthToken;
+// }

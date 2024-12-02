@@ -9,16 +9,16 @@ const REGION = "us-east-1";
 export class S3DAOProvider implements S3DAO {
   async uploadImage(
     fileName: string,
-    imageStringBase64Encoded: string
+    imageStringBase64Encoded: Buffer
   ): Promise<string> {
-    let decodedImageBuffer: Buffer = Buffer.from(
-      imageStringBase64Encoded,
-      "base64"
-    );
+    // let decodedImageBuffer: Buffer = Buffer.from(
+    //   imageStringBase64Encoded,
+    //   "base64"
+    // );
     const s3Params = {
       Bucket: BUCKET,
       Key: "image/" + fileName,
-      Body: decodedImageBuffer,
+      Body: imageStringBase64Encoded,
       ContentType: "image/png",
       ACL: ObjectCannedACL.public_read,
     };
