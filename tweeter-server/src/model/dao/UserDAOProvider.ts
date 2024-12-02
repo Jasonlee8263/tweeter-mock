@@ -10,7 +10,7 @@ import bcrypt from "bcryptjs";
 import { UserDAO } from "./UserDAO";
 import { User, UserDto } from "tweeter-shared";
 
-export class DynamoDBUserDAO implements UserDAO {
+export class UserDAOProvider implements UserDAO {
   private readonly dynamoDB;
   private readonly tableName = "Users";
 

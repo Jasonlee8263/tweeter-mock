@@ -9,13 +9,17 @@ import {
 import { UserDAO } from "../dao/UserDAO";
 import { S3DAO } from "../dao/S3DAO";
 import { DAOFactory } from "../dao/DAOFactory";
+import { SessionsDAO } from "../dao/SessionsDAO";
+import crypto from "crypto";
 
 export class UserService {
   private userDAO: UserDAO;
   private S3DAO: S3DAO;
+  private sessionsDAO: SessionsDAO;
   constructor(daoFactory: DAOFactory) {
     this.userDAO = daoFactory.createUserDAO();
     this.S3DAO = daoFactory.createS3DAO();
+    this.sessionsDAO = daoFactory.createSessionsDAO();
   }
   public async register(
     firstName: string,
@@ -39,8 +43,11 @@ export class UserService {
     if (user === null) {
       throw new Error("Invalid registration");
     }
+    const token = crypto.randomUUID();
+    const timestamp = Date.now();
+    await this.sessionsDAO.createSession(token, timestamp, alias);
 
-    return [user, FakeData.instance.authToken.dto];
+    return [user, new AuthToken(token, timestamp).dto];
   }
 
   public async login(
@@ -60,17 +67,22 @@ export class UserService {
 
     // TODO: Replace with the result of calling the server
     // const user = FakeData.instance.firstUser;
+    const token = crypto.randomUUID();
+    const timestamp = Date.now();
+    await this.sessionsDAO.createSession(token, timestamp, alias);
 
-    return [user, FakeData.instance.authToken.dto];
+    return [user, new AuthToken(token, timestamp).dto];
   }
   public async logout(token: string): Promise<void> {
     // Pause so we can see the logging out message. Delete when the call to the server is implemented.
-    await new Promise((res) => setTimeout(res, 1000));
+    // await new Promise((res) => setTimeout(res, 1000));
+    await this.sessionsDAO.deleteSession(token);
   }
   public async getUser(token: string, alias: string): Promise<UserDto | null> {
     // TODO: Replace with the result of calling server
     // const data = FakeData.instance.findUserByAlias(alias);
     const data = await this.userDAO.getUserByAlias(alias);
+    await this.sessionsDAO.updateSession(token, Date.now());
     return data ?? null;
   }
 }
