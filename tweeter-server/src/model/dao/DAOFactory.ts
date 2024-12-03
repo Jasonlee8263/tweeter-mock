@@ -10,6 +10,6 @@ export interface DAOFactory {
   createSessionsDAO(): SessionsDAO;
   // createStoryDAO(): StoryDAO;
   // createFeedDAO(): FeedDAO;
-  // createFollowsDAO(): FollowsDAO;
+  createFollowsDAO(): FollowsDAO;
   createS3DAO(): S3DAO;
 }
