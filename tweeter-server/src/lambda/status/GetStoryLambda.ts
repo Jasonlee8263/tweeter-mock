@@ -3,10 +3,11 @@ import {
   PagedStatusItemResponse,
 } from "tweeter-shared";
 import { StatusService } from "../../model/service/StatusService";
+import { DAOFactoryClass } from "../../model/dao/DAOFactoryClass";
 export const handler = async (
   request: PagedStatusItemRequest
 ): Promise<PagedStatusItemResponse> => {
-  const statusService = new StatusService();
+  const statusService = new StatusService(new DAOFactoryClass());
   const [items, hasMore] = await statusService.loadMoreStoryItems(
     request.token,
     request.userAlias,

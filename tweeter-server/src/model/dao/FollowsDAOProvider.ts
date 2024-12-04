@@ -27,8 +27,8 @@ export class FollowsDAOProvider {
     const params: PutCommandInput = {
       TableName: this.followsTable,
       Item: {
-        follower_handle: `@${follower}`,
-        followee_handle: `@${followee}`,
+        follower_handle: `${follower}`,
+        followee_handle: `${followee}`,
         follower_name: follower,
         followee_name: followee,
       },
@@ -44,8 +44,8 @@ export class FollowsDAOProvider {
     const params: DeleteCommandInput = {
       TableName: this.followsTable,
       Key: {
-        follower_handle: `@${follower}`,
-        followee_handle: `@${followee}`,
+        follower_handle: `${follower}`,
+        followee_handle: `${followee}`,
       },
     };
 
@@ -61,8 +61,8 @@ export class FollowsDAOProvider {
       KeyConditionExpression:
         "follower_handle = :follower AND followee_handle = :followee",
       ExpressionAttributeValues: {
-        ":follower": `@${follower}`,
-        ":followee": `@${followee}`,
+        ":follower": `${follower}`,
+        ":followee": `${followee}`,
       },
     };
 
@@ -78,7 +78,7 @@ export class FollowsDAOProvider {
       TableName: this.followsTable,
       KeyConditionExpression: "follower_handle = :follower",
       ExpressionAttributeValues: {
-        ":follower": `@${follower}`,
+        ":follower": `${follower}`,
       },
       Select: "COUNT",
     };
@@ -93,10 +93,10 @@ export class FollowsDAOProvider {
   async getFollowerCount(followee: string): Promise<number> {
     const params: QueryCommandInput = {
       TableName: this.followsTable,
-      IndexName: "follows_index", // Assuming your GSI is named "FolloweeIndex"
+      IndexName: "follows_index",
       KeyConditionExpression: "followee_handle = :followee",
       ExpressionAttributeValues: {
-        ":followee": `@${followee}`,
+        ":followee": `${followee}`,
       },
       Select: "COUNT",
     };
@@ -117,18 +117,19 @@ export class FollowsDAOProvider {
       TableName: this.followsTable,
       KeyConditionExpression: "follower_handle = :follower",
       ExpressionAttributeValues: {
-        ":follower": `@${follower}`,
+        ":follower": `${follower}`,
       },
       Limit: pageSize,
       ExclusiveStartKey: lastFolloweeHandle
         ? {
-            follower_handle: `@${follower}`,
+            follower_handle: `${follower}`,
             followee_handle: lastFolloweeHandle,
           }
         : undefined,
     };
 
     const result = await this.dynamoDB.send(new QueryCommand(params));
+    console.log("[DEBUG] Followees Query Result:", result.Items);
     const followees = result.Items?.map((item) => item.followee_handle) || [];
     const hasMore = !!result.LastEvaluatedKey;
 
@@ -145,21 +146,22 @@ export class FollowsDAOProvider {
   ): Promise<[string[], boolean]> {
     const params: QueryCommandInput = {
       TableName: this.followsTable,
-      IndexName: "follows_index", // Assuming your GSI is named "FolloweeIndex"
+      IndexName: "follows_index",
       KeyConditionExpression: "followee_handle = :followee",
       ExpressionAttributeValues: {
-        ":followee": `@${followee}`,
+        ":followee": `${followee}`,
       },
       Limit: pageSize,
       ExclusiveStartKey: lastFollowerHandle
         ? {
-            followee_handle: `@${followee}`,
+            followee_handle: `${followee}`,
             follower_handle: lastFollowerHandle,
           }
         : undefined,
     };
-
+    console.log("[DEBUG] Followers Query Params:", params);
     const result = await this.dynamoDB.send(new QueryCommand(params));
+    console.log("[DEBUG] Followers Query Result:", result.Items);
     const followers = result.Items?.map((item) => item.follower_handle) || [];
     const hasMore = !!result.LastEvaluatedKey;
 
@@ -178,8 +180,8 @@ export class FollowsDAOProvider {
     const params: UpdateCommandInput = {
       TableName: this.followsTable,
       Key: {
-        follower_handle: `@${follower}`,
-        followee_handle: `@${followee}`,
+        follower_handle: `${follower}`,
+        followee_handle: `${followee}`,
       },
       UpdateExpression:
         "SET follower_name = :newFollowerName, followee_name = :newFolloweeName",

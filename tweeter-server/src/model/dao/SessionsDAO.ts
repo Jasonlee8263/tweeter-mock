@@ -3,4 +3,5 @@ export interface SessionsDAO {
   getSession(token: string): Promise<string | null>;
   deleteSession(token: string): Promise<void>;
   updateSession(token: string, newLastUsed: number): Promise<void>;
+  getAliasByToken(authToken: string): Promise<string | null>;
 }

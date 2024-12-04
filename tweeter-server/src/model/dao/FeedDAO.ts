@@ -1,5 +1,18 @@
+import { PostSegmentDto, StatusDto } from "tweeter-shared";
+
 export interface FeedDAO {
-  receiverAlias: string;
-  timestamp: number;
-  content: string;
+  getFeedPage(
+    receiverAlias: string,
+    pageSize: number,
+    lastItem: StatusDto | null
+  ): Promise<
+    [{ authorAlias: string; content: string; timestamp: number }[], boolean]
+  >;
+
+  addToFeeds(status: {
+    receiverAlias: string;
+    timestamp: number;
+    content: string;
+    authorAlias: string;
+  }): Promise<void>;
 }

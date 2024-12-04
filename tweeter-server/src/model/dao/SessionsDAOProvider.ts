@@ -9,6 +9,8 @@ import {
   PutCommandInput,
   DeleteCommandInput,
   UpdateCommandInput,
+  QueryCommandInput,
+  QueryCommand,
 } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { SessionsDAO } from "./SessionsDAO";
@@ -81,5 +83,17 @@ export class SessionsDAOProvider implements SessionsDAO {
       console.error("Error updating session:", error);
       throw error;
     }
+  }
+  public async getAliasByToken(authToken: string): Promise<string | null> {
+    const params: QueryCommandInput = {
+      TableName: this.tableName,
+      KeyConditionExpression: "authToken = :authToken",
+      ExpressionAttributeValues: {
+        ":authToken": authToken,
+      },
+    };
+
+    const result = await this.dynamoDB.send(new QueryCommand(params));
+    return result.Items?.[0]?.alias || null;
   }
 }

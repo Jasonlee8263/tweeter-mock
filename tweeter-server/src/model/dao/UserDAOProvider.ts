@@ -4,6 +4,8 @@ import {
   DynamoDBDocumentClient,
   GetCommandInput,
   PutCommandInput,
+  UpdateCommand,
+  UpdateCommandInput,
 } from "@aws-sdk/lib-dynamodb";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import bcrypt from "bcryptjs";
@@ -38,6 +40,8 @@ export class UserDAOProvider implements UserDAO {
         lastName: user.lastName,
         imageUrl: user.imageUrl,
         hashedPassword, // Save hashed password in the database
+        followerCount: 0,
+        followeeCount: 0,
       },
     };
 
@@ -63,7 +67,7 @@ export class UserDAOProvider implements UserDAO {
       firstName: result.Item.firstName,
       lastName: result.Item.lastName,
       imageUrl: result.Item.imageUrl,
-    } as User;
+    } as UserDto;
   }
 
   /**
@@ -86,5 +90,90 @@ export class UserDAOProvider implements UserDAO {
 
     // Compare the provided plain password with the stored hashed password
     return bcrypt.compare(plainPassword, result.Item.hashedPassword);
+  }
+  public async incrementFollowerCount(userAlias: string): Promise<void> {
+    const params: UpdateCommandInput = {
+      TableName: "Users",
+      Key: { alias: userAlias },
+      UpdateExpression:
+        "SET followerCount = if_not_exists(followerCount, :start) + :increment",
+      ExpressionAttributeValues: {
+        ":start": 0, // 초기값
+        ":increment": 1, // 증가값
+      },
+    };
+
+    await this.dynamoDB.send(new UpdateCommand(params));
+  }
+
+  public async decrementFollowerCount(userAlias: string): Promise<void> {
+    const params: UpdateCommandInput = {
+      TableName: "Users",
+      Key: { alias: userAlias },
+      UpdateExpression:
+        "SET followerCount = if_not_exists(followerCount, :start) - :decrement",
+      ExpressionAttributeValues: {
+        ":decrement": 1,
+        ":min": 0,
+        ":start": 0,
+      },
+      ConditionExpression: "followerCount > :min", // 값이 0 미만으로 내려가지 않도록 방지
+    };
+
+    await this.dynamoDB.send(new UpdateCommand(params));
+  }
+
+  public async incrementFolloweeCount(userAlias: string): Promise<void> {
+    const params: UpdateCommandInput = {
+      TableName: "Users",
+      Key: { alias: userAlias },
+      UpdateExpression:
+        "SET followeeCount = if_not_exists(followeeCount, :start) + :increment",
+      ExpressionAttributeValues: {
+        ":start": 0, // 초기값
+        ":increment": 1, // 증가값
+      },
+    };
+
+    await this.dynamoDB.send(new UpdateCommand(params));
+  }
+
+  public async decrementFolloweeCount(userAlias: string): Promise<void> {
+    const params: UpdateCommandInput = {
+      TableName: "Users",
+      Key: { alias: userAlias },
+      UpdateExpression:
+        "SET followeeCount = if_not_exists(followeeCount, :start) - :decrement",
+      ExpressionAttributeValues: {
+        ":decrement": 1,
+        ":min": 0,
+        ":start": 0,
+      },
+      ConditionExpression: "followeeCount > :min", // 값이 0 미만으로 내려가지 않도록 방지
+    };
+
+    await this.dynamoDB.send(new UpdateCommand(params));
+  }
+
+  public async getFollowerCount(userAlias: string): Promise<number> {
+    const params = {
+      TableName: "Users",
+      Key: { alias: userAlias },
+      ProjectionExpression: "followerCount",
+    };
+
+    const result = await this.dynamoDB.send(new GetCommand(params));
+    return result.Item?.followerCount || 0;
+  }
+
+  public async getFolloweeCount(userAlias: string): Promise<number> {
+    const params = {
+      TableName: "Users",
+      Key: { alias: userAlias },
+      ProjectionExpression: "followeeCount",
+    };
+
+    const result = await this.dynamoDB.send(new GetCommand(params));
+    return result.Item?.followeeCount || 0;
   }
 }
