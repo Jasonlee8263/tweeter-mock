@@ -44,13 +44,9 @@ export class StoryDAOProvider implements StoryDAO {
             }
           : undefined,
       };
-      // 1. DynamoDB 쿼리 요청 파라미터 출력
-      console.log("[DEBUG] Query Parameters:", JSON.stringify(params, null, 2));
 
       const result = await this.dynamoDB.send(new QueryCommand(params));
 
-      // 2. DynamoDB 쿼리 결과 출력
-      console.log("[DEBUG] Query Result:", JSON.stringify(result, null, 2));
       const items =
         result.Items?.map((item) => ({
           authorAlias: item.authorAlias,

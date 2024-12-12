@@ -29,7 +29,6 @@ export class FollowService {
       pageSize,
       lastItem?.alias || null
     );
-    console.log("[DEBUG] Loading followers for:", userAlias);
 
     const dtos = await Promise.all(
       followerAliases.map(async (alias) => {
@@ -58,7 +57,6 @@ export class FollowService {
       pageSize,
       lastItem?.alias || null
     );
-    console.log("[DEBUG] Loading followees for:", userAlias);
 
     const dtos = await Promise.all(
       followeeAliases.map(async (alias) => {
@@ -104,6 +102,8 @@ export class FollowService {
     } catch (error) {
       console.error(`Error fetching follower count for ${user.alias}:`, error);
       throw error;
+    } finally {
+      await this.sessionsDAO.updateSession(token, Date.now());
     }
   }
 
@@ -114,6 +114,8 @@ export class FollowService {
     } catch (error) {
       console.error(`Error fetching followee count for ${user.alias}:`, error);
       throw error;
+    } finally {
+      await this.sessionsDAO.updateSession(token, Date.now());
     }
   }
 
@@ -150,6 +152,8 @@ export class FollowService {
     } catch (error) {
       console.error(`Error following ${userToFollow.alias}:`, error);
       throw error;
+    } finally {
+      await this.sessionsDAO.updateSession(token, Date.now());
     }
   }
 

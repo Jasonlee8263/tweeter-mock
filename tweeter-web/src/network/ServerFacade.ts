@@ -264,7 +264,7 @@ export class ServerFacade {
     } else {
       console.error(response);
       throw new Error(
-        response.message ?? "An error occurred while fetching register."
+        response.message ?? "An error occurred while fetching login."
       );
     }
   }

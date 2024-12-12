@@ -129,7 +129,6 @@ export class FollowsDAOProvider {
     };
 
     const result = await this.dynamoDB.send(new QueryCommand(params));
-    console.log("[DEBUG] Followees Query Result:", result.Items);
     const followees = result.Items?.map((item) => item.followee_handle) || [];
     const hasMore = !!result.LastEvaluatedKey;
 
@@ -159,9 +158,7 @@ export class FollowsDAOProvider {
           }
         : undefined,
     };
-    console.log("[DEBUG] Followers Query Params:", params);
     const result = await this.dynamoDB.send(new QueryCommand(params));
-    console.log("[DEBUG] Followers Query Result:", result.Items);
     const followers = result.Items?.map((item) => item.follower_handle) || [];
     const hasMore = !!result.LastEvaluatedKey;
 
